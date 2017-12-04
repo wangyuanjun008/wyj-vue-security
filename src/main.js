@@ -7,7 +7,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import Mock from './mock'
 import store from './vuex/store'
-Mock.bootstrap();
+//Mock.mockData();
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
 Vue.config.productionTip = false
