@@ -18,5 +18,15 @@ export default new Router({
         name : '用户管理'
       }
     ]
+  }, {
+    path: '/data',
+    component: resolve => require(['../view/home.vue'], resolve),
+    name : '数据字典',
+    children: [{
+        path: '/dataGroup',
+        component: resolve => require(['../view/data/dataGroup.vue'], resolve),
+        name : '数据分组'
+      }
+    ]
   }]
 })
