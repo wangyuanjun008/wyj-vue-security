@@ -5,8 +5,8 @@ const LoginUsers = [
     id: 1,
     username: 'admin',
     password: '123456',
-    avatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
-    name: '张某某'
+    avatar: '../../assets/user.jpg',
+    name: '管理员'
   }
 ];
 
@@ -26,4 +26,17 @@ for (let i = 0; i < 86; i++) {
   }));
 }
 
-export { LoginUsers, Users };
+const dataGroups = [];
+
+for (let i = 0; i < 86; i++) {
+  dataGroups.push(Mock.mock({
+    id: Mock.Random.guid(),
+    groupCode: Mock.Random.string( 5, 10 ),
+    groupName: Mock.Random.string( 5, 10 ),
+    remark: Mock.Random.string( 5, 10 ),
+    status: Mock.Random.integer(1, 0),
+    parentId: Mock.Random.guid()
+  }));
+}
+
+export { LoginUsers, Users,dataGroups };
