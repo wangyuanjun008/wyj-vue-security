@@ -1,13 +1,13 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { LoginUsers, Users } from './data/user';
+import { LoginUsers, Users,dataGroups } from './data/user';
 let _Users = Users;
+let _dataGroups = dataGroups;
+
 
 export default {
-  /**
-   * mock bootstrap
-   */
-  bootstrap() {
+
+  mockData() {
     let mock = new MockAdapter(axios);
 
     // mock success request
@@ -147,6 +147,42 @@ export default {
             msg: '新增成功'
           }]);
         }, 500);
+      });
+    });
+
+
+        //获取用户列表
+    mock.onGet('/dataGroup/list').reply(config => {
+      let {groupCode} = config.params;
+      let mockDataGroups = _dataGroups.filter(dataGroup => {
+        if (groupCode && dataGroup.groupCode.indexOf(groupCode) == -1) return false;
+        return true;
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            dataGroups: mockDataGroups
+          }]);
+        }, 1000);
+      });
+    });
+
+    //获取用户列表（分页）
+    mock.onGet('/dataGroup/listpage').reply(config => {
+      let {page, groupCode} = config.params;
+      let mockDataGroups = _dataGroups.filter(dataGroup => {
+        if (groupCode && dataGroup.groupCode.indexOf(groupCode) == -1) return false;
+        return true;
+      });
+      let total = mockDataGroups.length;
+      mockDataGroups = mockDataGroups.filter((u, index) => index < 20 * page && index >= 20 * (page - 1));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            total: total,
+            dataGroups: mockDataGroups
+          }]);
+        }, 1000);
       });
     });
 
