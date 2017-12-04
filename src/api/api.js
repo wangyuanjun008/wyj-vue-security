@@ -1,4 +1,5 @@
 import axios from 'axios';
+import qs from 'qs';
 
 let base = '';
 
@@ -15,3 +16,14 @@ export const batchRemoveUser = params => { return axios.get(`${base}/user/batchr
 export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
 
 export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
+
+//export const getDataGroupListPage = params => { return axios.get(`http://localhost:8081/remote/dataGroup/list`, { params: params }); };
+
+export const getDataGroupListPage = params => { return axios.get(`/remote/dataGroup/list`, { params: params }); };
+
+export const addDataGroup = params => { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
+
+export const editDataGroup = params => { return axios.post(`/remote/dataGroup/edit`, { params: params }); };
+
+export const removeDataGroup = params => { return axios.post(`/remote/dataGroup/remove`, { params: params }); };
+
