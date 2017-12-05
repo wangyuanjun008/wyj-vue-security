@@ -19,11 +19,11 @@ export const addUser = params => { return axios.get(`${base}/user/add`, { params
 
 //export const getDataGroupListPage = params => { return axios.get(`http://localhost:8081/remote/dataGroup/list`, { params: params }); };
 
-export const getDataGroupListPage = params => { return axios.get(`/remote/dataGroup/list`, { params: params }); };
+export const getDataGroupListPage = params => { return axios.post(`/remote/dataGroup/list`, qs.stringify(params)); };
 
 export const addDataGroup = params => { return axios.post(`/remote/dataGroup/add`, qs.stringify(params) ); };
 
-export const editDataGroup = params => { return axios.post(`/remote/dataGroup/edit`, { params: params }); };
+export const removeDataGroup = params => { return axios.post(`/remote/dataGroup/remove`, qs.stringify(params)); };
 
-export const removeDataGroup = params => { return axios.post(`/remote/dataGroup/remove`, { params: params }); };
-
+//export const getData = params => {  axios.get(`/remote/dataDict/getData`, { params }).then((res)=>{return res.data}); };
+export const getData = params => {return  axios.get(`/remote/dataDict/getData`, { params }); };
