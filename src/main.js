@@ -10,6 +10,8 @@ import store from './vuex/store'
 //Mock.mockData();
 import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.min.css'
+import 'ztree/css/zTreeStyle/zTreeStyle.css'
+import 'ztree'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
