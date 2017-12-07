@@ -26,6 +26,10 @@ export default new Router({
         path: '/dataGroup',
         component: resolve => require(['../view/data/dataGroup.vue'], resolve),
         name : '数据分组'
+      },{
+        path: '/dataDict',
+        component: resolve => require(['../view/data/dataDict.vue'], resolve),
+        name : '数据字典'
       }
     ]
   }]
