@@ -186,7 +186,7 @@
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
-					let para = { id: row.id };
+					let para = { ids: row.userId };
 					removeUser(para).then((res) => {
 						this.listLoading = false;
 						this.$message({
@@ -269,13 +269,13 @@
 			},
 			//批量删除
 			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
+				var ids = this.sels.map(item => item.userId).toString();
 				this.$confirm('确认删除选中记录吗？', '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
 					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
+					removeUser(para).then((res) => {
 						this.listLoading = false;
 						this.$message({
 							message: '删除成功',
