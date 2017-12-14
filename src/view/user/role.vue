@@ -171,11 +171,7 @@
 			//显示编辑界面
 			handleEdit: function (index, row) {
 				this.commonFormVisible = true;
-				let data = Object.assign({}, row);
-				editUser(data.userId).then((res) => {
-					this.$refs['commonForm'].resetFields();
-					this.commonForm = res.data.data.obj;
-				});
+				this.commonForm = Object.assign({}, row);
 			},
 			//显示新增界面
 			handleAdd: function () {
