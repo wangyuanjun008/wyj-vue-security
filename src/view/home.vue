@@ -1,94 +1,116 @@
 <template>
-	<el-row class="container">
-		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				{{collapsed?'':sysName}}
+	<div>
+		<el-row class="container">
+			<el-col :span="24" class="header">
+				<el-col :span="20" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+					{{collapsed?'':sysName}}
+				</el-col>
+				<el-col :span="4" class="userinfo">
+					<el-dropdown trigger="hover">
+						<span class="el-dropdown-link userinfo-inner"><img src="../assets/user.jpg" /> {{sysUserName}}</span>
+						<el-dropdown-menu slot="dropdown">
+							<el-dropdown-item @click.native="personInfo">修改密码</el-dropdown-item>
+							<el-dropdown-item>设置</el-dropdown-item>
+							<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+						</el-dropdown-menu>
+					</el-dropdown>
+				</el-col>
 			</el-col>
-			<el-col :span="10">
-				<div class="tools" @click.prevent="collapse">
-					<i class="fa fa-align-justify"></i>
-				</div>
-			</el-col>
-			<el-col :span="4" class="userinfo">
-				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item>我的消息</el-dropdown-item>
-						<el-dropdown-item>设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</el-col>
-		</el-col>
-		<el-col :span="24" class="main">
-			<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
-				<!--导航菜单-->
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
-					 unique-opened router v-show="!collapsed">
-					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-						<el-submenu :index="index+''" v-if="!item.leaf">
-							<template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-						</el-submenu>
-						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i :class="item.iconCls"></i>{{item.children[0].name}}</el-menu-item>
-					</template>
-				</el-menu>
-				<!--导航菜单-折叠后-->
-				<ul class="el-menu el-menu-vertical-demo collapsed" v-show="collapsed" ref="menuCollapsed">
-					<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">
-						<template v-if="!item.leaf">
-							<div class="el-submenu__title" style="padding-left: 20px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i></div>
-							<ul class="el-menu submenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"> 
-								<li v-for="child in item.children" v-if="!child.hidden" :key="child.path" class="el-menu-item" style="padding-left: 40px;" :class="$route.path==child.path?'is-active':''" @click="$router.push(child.path)">{{child.name}}</li>
-							</ul>
+			<el-col :span="24" class="main">
+				<aside :class="collapsed?'menu-collapsed':'menu-expanded'">
+					<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose"
+						 unique-opened router v-show="!collapsed">
+						<template v-for="(item,index) in menus">
+							<el-submenu :index="index+''"  v-if="item.type==0">
+								<template slot="title">{{item.name}}</template>
+								<el-menu-item v-for="child in item.list" :index="child.url" :key="child.url" v-if="item.list != null">{{child.name}}</el-menu-item>
+							</el-submenu>
+							<el-menu-item v-if="item.type==1" :index="item.url">{{item.name}}</el-menu-item>
 						</template>
-						<template v-else>
-							<li class="el-submenu">
-								<div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.children[0].path?'is-active':''" @click="$router.push(item.children[0].path)"><i :class="item.iconCls"></i></div>
-							</li>
-						</template>
-					</li>
-				</ul>
-			</aside>
-			<section class="content-container">
-				<div class="grid-content bg-purple-light">
-					<el-col :span="24" class="breadcrumb-container">
-						<strong class="title">{{$route.name}}</strong>
-						<el-breadcrumb separator="/" class="breadcrumb-inner">
-							<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
-								{{ item.name }}
-							</el-breadcrumb-item>
-						</el-breadcrumb>
+					</el-menu>				
+				</aside>
+				<section class="content-container">
+					<div class="grid-content bg-purple-light">
+						<el-col :span="24" class="breadcrumb-container">
+							<strong class="title">{{$route.name}}</strong>
+							<el-breadcrumb separator="/" class="breadcrumb-inner">
+								<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+									{{ item.name }}
+								</el-breadcrumb-item>
+							</el-breadcrumb>
+						</el-col>
+						<el-col :span="24" class="content-wrapper">
+							<transition name="fade" mode="out-in">
+								<router-view></router-view>
+							</transition>
+						</el-col>
+					</div>
+				</section>
+			</el-col>
+		</el-row>
+		<!--公共界面-->
+		<el-dialog title="修改密码" :visible.sync="commonFormVisible" :close-on-click-modal="false" width="22%">
+			<el-form :model="commonForm" label-width="110px" :rules="commonFormRules" ref="commonForm">
+				<el-row>
+					<el-col>
+						<el-form-item label="原密码" prop="oldPassword">
+							<el-input v-model="commonForm.oldPassword" auto-complete="off"></el-input>
+						</el-form-item>
 					</el-col>
-					<el-col :span="24" class="content-wrapper">
-						<transition name="fade" mode="out-in">
-							<router-view></router-view>
-						</transition>
+				</el-row>
+				<el-row>
+					<el-col>
+						<el-form-item label="新密码" prop="newPassword">
+							<el-input v-model="commonForm.newPassword" auto-complete="off"></el-input>
+						</el-form-item>
 					</el-col>
-				</div>
-			</section>
-		</el-col>
-	</el-row>
+				</el-row>
+				<el-row>
+					<el-col>
+						<el-form-item label="再输入新密码" prop="repeatNewPassword">
+							<el-input v-model="commonForm.repeatNewPassword" auto-complete="off"></el-input>
+						</el-form-item>
+					</el-col>										
+				</el-row>			
+				<el-input v-model="commonForm.roleId" type="hidden" auto-complete="off"></el-input>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="commonFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="commonSubmit" :loading="commonLoading">提交</el-button>
+			</div>
+		</el-dialog>	
+	</div>
 </template>
 
 <script>
+import {getDataStore,updatePassword } from '../api/api';
 	export default {
 		data() {
 			return {
-				sysName:'VUEADMIN',
+				sysName:'权限管理系统',
 				collapsed:false,
 				sysUserName: '',
-				sysUserAvatar: '',
-				form: {
-					name: '',
-					region: '',
-					date1: '',
-					date2: '',
-					delivery: false,
-					type: [],
-					resource: '',
-					desc: ''
-				}
+				sysUserAvatar: '../assets/user.jpg',
+				commonFormRules: {
+					oldPassword: [
+						{ required: true, message: '请输入原密码', trigger: 'blur' }
+					],
+					newPassword: [
+						{ required: true, message: '请输入新密码', trigger: 'blur' }
+					],
+					repeatNewPassword: [
+						{ required: true, message: '请输入再输入新密码', trigger: 'blur' }
+					]
+				},
+				//界面数据重置
+				commonForm: {
+					oldPassword: '',
+					newPassword: '',
+					repeatNewPassword: ''
+				},
+				commonFormVisible: false,//界面是否显示
+				commonLoading: false,
+				menus:getDataStore('/remote/index').data.menus,
 			}
 		},
 		methods: {
@@ -100,8 +122,6 @@
 			},
 			handleclose() {
 				//console.log('handleclose');
-			},
-			handleselect: function (a, b) {
 			},
 			//退出登录
 			logout: function () {
@@ -117,18 +137,74 @@
 			//折叠导航栏
 			collapse:function(){
 				this.collapsed=!this.collapsed;
+				console.log(window.parent.perms);
 			},
 			showMenu(i,status){
 				this.$refs.menuCollapsed.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
-			}
+			},
+			//当前登陆人的操作权限
+			getPermList : function(){
+			    $.ajax({
+			        dataType : 'json',
+			        url : '/remote/user/perms',
+			        async : false,
+			        success : function(data) {
+			        	window.perms=data.data.perms;
+			        }
+			    });				
+			},
+			personInfo : function(){
+				this.commonFormVisible = true;
+				this.commonForm = {
+					oldPassword: '',
+					newPassword: '',
+					repeatNewPassword: ''
+				};				
+			},
+			//提交
+			commonSubmit: function () {
+				this.$refs.commonForm.validate((valid) => {
+					if (valid) {
+						this.$confirm('确认提交吗？', '提示', {}).then(() => {
+							if(this.commonForm.newPassword != this.commonForm.repeatNewPassword){
+				                this.$message({
+				                    message: '新密码输入不正确,请重新输入!',
+				                    type: 'error'
+				                });
+				                return;
+							}
+							this.commonLoading = true;
+							let para = Object.assign({}, this.commonForm);
+							updatePassword(para).then(data => {
+								this.commonLoading = false;
+
+					            let { errorMsg, success} = data;
+					            if (success == true) {
+									this.$message({
+										message: '提交成功',
+										type: 'success'
+									});              	
+					            } else {
+					                this.$message({
+					                    message: errorMsg,
+					                    type: 'error'
+					                });
+					            }
+								this.$refs['commonForm'].resetFields();
+							});
+						});
+					}
+				});
+			}			
 		},
 		mounted() {
 			var user = sessionStorage.getItem('user');
 			if (user) {
 				user = JSON.parse(user);
 				this.sysUserName = user.name || '';
-				this.sysUserAvatar = user.avatar || '';
+				//this.sysUserAvatar = user.avatar || '';
 			}
+			this.getPermList();
 		}
 	}
 </script>
