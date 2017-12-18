@@ -13,7 +13,7 @@
 		</ul>
 		<h3>&nbsp;&nbsp;&nbsp;获取帮助</h3>
 		<ul>
-			<li>git地址：<a href="https://github.com/wangyuanjun008/wyj-parent.git" target="_blank">https://github.com/wangyuanjun008/wyj-parent.git</a></li>
+			<li>git地址：<a href="https://github.com/wangyuanjun008/wyj-vue-security.git" target="_blank">https://github.com/wangyuanjun008/wyj-vue-security.git</a></li>
 			<li>如需关注项目最新动态，请Watch、Star项目，同时也是对项目最好的支持</li>
 		</ul>	
 	</div>
