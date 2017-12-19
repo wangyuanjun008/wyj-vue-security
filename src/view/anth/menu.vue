@@ -109,7 +109,6 @@
 </template>
 
 <script>
-	import util from '../../util/js/util'
 	import { getMenuListPage,addMenu,removeMenu,getData,getDataStore} from '../../api/api';
 	export default {
 		data() {

@@ -101,7 +101,6 @@
 </template>
 
 <script>
-	import util from '../../util/js/util'
 	import { getDataDictListPage,addDataDict,removeDataDict,getData,getDataStore} from '../../api/api';
 	export default {
 		data() {

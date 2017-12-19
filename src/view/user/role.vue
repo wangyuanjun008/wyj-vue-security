@@ -94,7 +94,6 @@
 </template>
 
 <script>
-	import util from '../../util/js/util';
 	import { getRoleListPage, removeRole, addRole,getData,getDataStore } from '../../api/api';
 	var ztree;
 	export default {

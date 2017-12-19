@@ -9,10 +9,10 @@
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUsers">查询</el-button>
 				</el-form-item>
-				<el-form-item>
+				<el-form-item v-if="hasPermission('user:save')">
 					<el-button type="primary" @click="handleAdd">新增</el-button>
 				</el-form-item>
-				<el-form-item>
+				<el-form-item v-if="hasPermission('user:remove')">
 					<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
 				</el-form-item>				
 			</el-form>
@@ -40,8 +40,8 @@
 			</el-table-column>
 			<el-table-column label="操作" width="150" fixed="right">
 				<template slot-scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button v-if="hasPermission('user:edit')" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button v-if="hasPermission('user:remove')" type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-	import util from '../../util/js/util'
+	import common from '../../util/js/common.js';
 	import { getUserListPage, removeUser, addUser,editUser,getData,getDataStore } from '../../api/api';
 	export default {
 		data() {
@@ -155,7 +155,7 @@
 					roles: ''
 				},
 				sexItems : getDataStore('/remote/dataDict/getData?groupCode='+'sex'),
-				rolesItems : getDataStore('/remote/dataDict/getData?groupCode='+'yesOrNo')
+				rolesItems : getDataStore('/remote/role/getAllRoles')
 			}
 		},
 		methods: {
@@ -204,6 +204,12 @@
 				let data = Object.assign({}, row);
 				editUser(data.userId).then((res) => {
 					this.$refs['commonForm'].resetFields();
+					let arrIntRoles  = res.data.data.obj.roles;
+					var arrStringRoles = new Array();
+					for(var role in arrIntRoles){
+						arrStringRoles.push(arrIntRoles[role]+'');
+					}
+					res.data.data.obj.roles = arrStringRoles;
 					this.commonForm = res.data.data.obj;
 				});
 			},
@@ -285,6 +291,10 @@
 					});
 				}).catch(() => {
 				});
+			},
+			hasPermission : function(permission){
+				console.log(window .perms);
+				return common.hasPermission(permission);
 			}
 		},
 		mounted() {

@@ -9,10 +9,10 @@
 				<el-form-item>
 					<el-button type="primary" v-on:click="getDataGroups">查询</el-button>
 				</el-form-item>
-				<el-form-item>
+				<el-form-item v-if="hasPermission('dataGroup:save')">
 					<el-button type="primary" @click="handleAdd">新增</el-button>
 				</el-form-item>
-				<el-form-item>
+				<el-form-item v-if="hasPermission('dataGroup:remove')">
 					<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
 				</el-form-item>
 			</el-form>
@@ -34,8 +34,8 @@
 			</el-table-column>
 			<el-table-column label="操作" width="150" fixed="right">
 				<template slot-scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-button v-if="hasPermission('dataGroup:edit')" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button v-if="hasPermission('dataGroup:remove')" type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-	import util from '../../util/js/util'
+	import common from '../../util/js/common.js';
 	import { getDataGroupListPage,addDataGroup,removeDataGroup,getData} from '../../api/api';
 	export default {
 		data() {
@@ -227,6 +227,9 @@
 					});
 				}).catch(() => {
 				});
+			},
+			hasPermission : function(permission){
+				return common.hasPermission(permission);
 			}
 		},
 		mounted() {

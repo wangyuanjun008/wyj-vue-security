@@ -6,7 +6,7 @@
 				<el-form-item>
 					<el-input v-model="filters.operation" placeholder="操作名称"></el-input>
 				</el-form-item>
-				<el-form-item v-if="hasPermission('log:remove')">
+				<el-form-item>
 					<el-button type="primary" v-on:click="getLogs">查询</el-button>
 				</el-form-item>
 			</el-form>
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-	import util from '../../util/js/util'
 	import common from '../../util/js/common.js';
 	import { getLogPage} from '../../api/api';
 	export default {

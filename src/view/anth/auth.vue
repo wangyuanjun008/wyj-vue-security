@@ -94,7 +94,6 @@
 </template>
 
 <script>
-	import util from '../../util/js/util'
 	import { getAuthListPage,addAuth,removeAuth,getData,getDataStore} from '../../api/api';
 	export default {
 		data() {
